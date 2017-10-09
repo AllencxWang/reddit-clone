@@ -3,9 +3,28 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
+const sort = require('./lib/utils').sort
+
 const app = express()
-const port = process.env.PORT || 3000
 const isProduction = process.env.NODE_ENV === 'production'
+
+const compare = (a, b) => {
+  // sort by vote number (desc)
+  // if two topics have same vote number, then sort by id (asc)
+  // this will keep the last-created topic at the bottom
+  // since its vote number will be 0 and it will have the biggest id
+  if (a.vote > b.vote) return -1
+  else if (a.vote < b.vote) return 1
+  else return a.id - b.id
+}
+
+const topics = Array(20).fill(0).map((item, index) => ({
+  id: index,
+  content: `topic ${index+1}`,
+  vote: Math.floor(Math.random()*100)
+}))
+
+let sortedTopics = sort(topics, compare)
 
 if (!isProduction) {
   // since webpack dev server runs in a different origin
@@ -17,16 +36,33 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.static(path.join(__dirname, 'static')))
 
-app.get('/api/test', function(req, res) {
-  res.json({hello: 'world'})
+app.get('/api/topics', (req, res) => {
+  res.json(sortedTopics)
 })
 
-app.post('/api/test', function(req, res) {
-  res.json(req.body)
+app.post('/api/topics', (req, res) => {
+  const newTopic = {
+    id: topics.length,
+    content: `${req.body.content}`, // caution: potential xss
+    vote: 0
+  }
+  topics.push(newTopic)
+  sortedTopics.push(newTopic)
+  res.json(sortedTopics)
 })
 
-app.listen(port, function() {
-  console.log(`server is listening on port: ${port}`)
+app.put('/api/topics/:id', (req, res) => {
+  const id = parseInt(req.params.id, 10)
+  const value = parseInt(req.body.value, 10)
+  if (isNaN(id) || isNaN(value) || id > topics.length || id < 0 || value === 0) {
+    // if the id or the vote number is invalid 
+    // or the vote number doesn't change
+    // then there is no need to refresh the page
+    return res.status(204).end()
+  }
+  topics[id].vote += value
+  sortedTopics = sort(topics, compare)
+  res.json(sortedTopics)
 })
 
 module.exports = app

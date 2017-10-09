@@ -6,8 +6,8 @@ import config from '../config'
 const App = () => (
   <div>
     <button onClick={(evt) => {
-      axios.post(`${config.server}/api/test`, {
-        hello: 'world',
+      axios.post(`${config.server}/api/topics`, {
+        content: 'hello world',
       })
       .then((res) => {
         console.log(res)
