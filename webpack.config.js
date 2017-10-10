@@ -18,6 +18,15 @@ const config = {
         loader: 'babel-loader',
         exclude: /node_modules/
       },
+      {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', {
+          loader: 'sass-loader',
+          options: {
+            includePaths: ['src/']
+          }
+        }]
+      }
     ]
   },
   plugins: [

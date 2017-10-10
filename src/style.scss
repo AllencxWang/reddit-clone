@@ -1,0 +1,124 @@
+$arrow-size: 15px;
+
+@mixin rounded {
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+.app {
+  width: 900px;
+  margin: 0 auto;
+  padding: 10px;
+  nav {
+    margin: 5px 0;
+    text-align: center;
+    a {
+      display: inline-block;
+      width: 200px;
+      height: 50px;
+      line-height: 50px;
+      background-color: #b0bec5;
+      border: 1px solid #78909c;
+      text-decoration: inherit;
+      color: #455a64;
+      &:hover {
+        opacity: 0.7;
+      }
+      &.active {
+        color: #eceff1;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.editor, .board {
+  margin: 0 auto;
+  width: 780px;
+  padding: 10px;
+  border: 1px solid #78909c;
+}
+
+.topic {
+  @include rounded;
+  width: 750px;
+  border: 1px solid #ddd;
+  margin: 0 auto 10px auto;
+  .score, .content, .no {
+    float: left;
+    padding: 5px;
+    margin: 5px;
+    height: 70px;
+    border: 1px solid #ddd;
+  }
+  .score {
+    width: 60px;
+    text-align: center;
+    .arrow-up, .arrow-down {
+      width: 0; 
+      height: 0;
+      border-left: $arrow-size solid transparent;
+      border-right: $arrow-size solid transparent; 
+      display: inline-block;
+      &:hover {
+        cursor: pointer;
+        opacity: 0.5;
+      }
+      &:active {
+        opacity: 0.7;
+      }
+    }
+    .arrow-up {
+      border-bottom: $arrow-size solid black;
+    }
+    .arrow-down {
+      border-top: $arrow-size solid black;
+    }
+    .vote {
+      height: 20px;
+      line-height: 20px;
+    }
+  }
+  .content {
+    width: 610px;
+    overflow: auto;
+    word-wrap: break-word;
+  }
+  .no {
+    color: #ddd;
+    text-align: center;
+    width: 45px;
+    line-height: 70px;
+  }
+  .clear {
+    clear: both;
+  }
+}
+
+.editor {
+  textarea {
+    height: 450px;
+    width: 100%;
+    margin: 5px 0;
+    resize: none;
+  }
+  button {
+    height: 40px;
+    width: 100%;
+    margin: 5px 0;
+  }
+}
+
+.transition {
+  text-align: center;
+  height: 500px;
+  line-height: 500px;
+}
