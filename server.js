@@ -18,16 +18,20 @@ const compare = (a, b) => {
   else return a.id - b.id
 }
 
-const topics = Array(20).fill(0).map((item, index) => ({
+const take20 = (arr) => arr.slice(0, 20)
+
+const topics = Array(10).fill(0).map((item, index) => ({
   id: index,
   content: `topic ${index+1}`,
   vote: Math.floor(Math.random()*100)
 }))
 
-let sortedTopics = sort(topics, compare)
+let sortedTopics = take20(sort(topics, compare))
+let delay = 500
+app.setLatency = (latency) => delay = latency
 
 // use wrap to simulate network latency in dev environment (localhost)
-const wrap = isProduction ? (fn) => fn : (fn) => () => setTimeout(fn, 500)
+const wrap = isProduction ? (fn) => fn : (fn) => () => setTimeout(fn, delay)
 
 if (!isProduction) {
   // since webpack dev server runs in a different origin
@@ -50,7 +54,7 @@ app.post('/api/topics', (req, res) => {
     vote: 0
   }
   topics.push(newTopic)
-  sortedTopics.push(newTopic)
+  if (topics.length <= 20) sortedTopics.push(newTopic)
   wrap(() => res.json(sortedTopics))()
 })
 
@@ -66,7 +70,7 @@ app.put('/api/topics', (req, res) => {
 
   if (!changed) return res.status(204).end()
 
-  sortedTopics = sort(topics, compare)
+  sortedTopics = take20(sort(topics, compare))
   wrap(() => res.json(sortedTopics))()
 })
 

@@ -2,9 +2,10 @@ const request = require('supertest')
 const expect = require('chai').expect
 
 const server = require('../server')
+server.setLatency(0)
 
 describe('API Endpoints', () => {
-  const initialTopicCount = 20
+  const initialTopicCount = 10
   it('should return initial topics', (done) => {
     request(server)
       .get('/api/topics')
