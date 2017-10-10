@@ -26,6 +26,9 @@ const topics = Array(20).fill(0).map((item, index) => ({
 
 let sortedTopics = sort(topics, compare)
 
+// use wrap to simulate network latency in dev environment (localhost)
+const wrap = isProduction ? (fn) => fn : (fn) => () => setTimeout(fn, 500)
+
 if (!isProduction) {
   // since webpack dev server runs in a different origin
   // we need to add this middleware to support cors
@@ -37,7 +40,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.static(path.join(__dirname, 'static')))
 
 app.get('/api/topics', (req, res) => {
-  res.json(sortedTopics)
+  wrap(() => res.json(sortedTopics))()
 })
 
 app.post('/api/topics', (req, res) => {
@@ -48,7 +51,7 @@ app.post('/api/topics', (req, res) => {
   }
   topics.push(newTopic)
   sortedTopics.push(newTopic)
-  res.json(sortedTopics)
+  wrap(() => res.json(sortedTopics))()
 })
 
 app.put('/api/topics', (req, res) => {
@@ -64,7 +67,7 @@ app.put('/api/topics', (req, res) => {
   if (!changed) return res.status(204).end()
 
   sortedTopics = sort(topics, compare)
-  res.json(sortedTopics)
+  wrap(() => res.json(sortedTopics))()
 })
 
 app.put('/api/topics/:id', (req, res) => {
@@ -78,7 +81,7 @@ app.put('/api/topics/:id', (req, res) => {
   }
   topics[id].vote += delta
   sortedTopics = sort(topics, compare)
-  res.json(sortedTopics)
+  wrap(() => res.json(sortedTopics))()
 })
 
 module.exports = app
