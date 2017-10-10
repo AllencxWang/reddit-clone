@@ -51,16 +51,32 @@ app.post('/api/topics', (req, res) => {
   res.json(sortedTopics)
 })
 
+app.put('/api/topics', (req, res) => {
+  let changed = false
+  for (let t of req.body.topics) {
+    const topic = topics[t.id]
+    if (topic) {
+      topic.vote += t.delta
+      changed = true
+    }
+  }
+
+  if (!changed) return res.status(204).end()
+
+  sortedTopics = sort(topics, compare)
+  res.json(sortedTopics)
+})
+
 app.put('/api/topics/:id', (req, res) => {
   const id = parseInt(req.params.id, 10)
-  const value = parseInt(req.body.value, 10)
-  if (isNaN(id) || isNaN(value) || id > topics.length || id < 0 || value === 0) {
+  const delta = parseInt(req.body.delta, 10)
+  if (isNaN(id) || isNaN(delta) || id > topics.length || id < 0 || delta === 0) {
     // if the id or the vote number is invalid 
     // or the vote number doesn't change
     // then there is no need to refresh the page
     return res.status(204).end()
   }
-  topics[id].vote += value
+  topics[id].vote += delta
   sortedTopics = sort(topics, compare)
   res.json(sortedTopics)
 })
