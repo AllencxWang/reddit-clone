@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot & nodemon index.js",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "test": "mocha --compilers js:babel-core/register"
+    "test": "mocha --compilers js:babel-core/register",
+    "prebuild": "npm run test",
+    "start": "node index.js"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
