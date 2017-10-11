@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import debounce from 'lodash.debounce'
 import axios from 'axios'
 
-import {vote, fetchTopics, beginTransition, endTransition} from '../actions'
+import {voteUp, voteDown, fetchTopics, beginTransition, endTransition} from '../actions'
 import {SERVER} from '../constants'
 import '../style.scss'
 
@@ -30,7 +30,8 @@ class App extends Component {
   }
 
   vote(data) {
-    this.props.dispatch(vote(data))
+    if (data.value > 0) this.props.dispatch(voteUp(data.id))
+    else this.props.dispatch(voteDown(data.id)) 
     this.queue[data.id] = this.queue[data.id] || 0
     this.queue[data.id] += data.value
     this.syncVote()

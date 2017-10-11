@@ -1,9 +1,16 @@
 import * as constants from './constants'
 
-export const vote = (data) => {
+export const voteUp = (id) => {
   return {
-    type: data.type,
-    payload: data.id
+    type: constants.VOTE_UP,
+    payload: id
+  }
+}
+
+export const voteDown = (id) => {
+  return {
+    type: constants.VOTE_DOWN,
+    payload: id
   }
 }
 

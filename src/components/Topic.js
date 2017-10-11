@@ -1,14 +1,11 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 
-import {VOTE_UP, VOTE_DOWN} from '../constants'
-
 const Topic = ({id, vote, content, no, onVote}) => {
   const onClick = (evt) => {
     var up = evt.target.classList.contains('arrow-up') 
     onVote({
       id,
-      type: up ? VOTE_UP : VOTE_DOWN,
       value: up ? 1 : -1
     })
   }

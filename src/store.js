@@ -1,10 +1,12 @@
-import {createStore, combineReducers} from 'redux'
+import {createStore} from 'redux'
 
-import topics from './reducers/topics'
-import transition from './reducers/transition'
+import reducers from './reducers'
+
+const isProduction = process.env.NODE_ENV === 'production'
+const window = isProduction ? {} : window || {}
 
 const store = createStore(
-	combineReducers({topics, transition}),
+	reducers,
 	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 
