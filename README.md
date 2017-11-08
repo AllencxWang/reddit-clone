@@ -27,7 +27,7 @@ Design:
 
 ## How to Deploy
 
-This app uses docker as a service container, if you would like to modify the code and deploy to your own heroku app container, you can follow the steps below:
+This app uses docker as an app runner, if you would like to modify the code and deploy to your own heroku app container, you can follow the steps below:
 
 ```
 yarn run build
